@@ -1,0 +1,48 @@
+# Include your project-specific ignores in this file
+# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
+
+# Python bytecode:
+*.py[co]
+
+# Packaging files:
+*.egg*
+
+# Editor temp files:
+.*sw[op]
+*~
+
+# Sphinx docs:
+_build
+build
+.Python
+
+# SQLite3 database files:
+*.db
+
+# Redis database files:
+*.rdb
+
+# Log & PID files:
+*.log
+*.pid
+
+# Celery schedule file:
+celerybeat-schedule
+
+# Collected static files:
+/static/
+
+# Attached files including image:
+media/
+
+# Migration files:
+migrations/
+
+# SASS cache files:
+.sass-cache/
+
+# Sensitive data:
+sensitive/
+
+# Node modules:
+node_modules/
