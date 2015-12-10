@@ -1,4 +1,6 @@
-# Django sample project
+# Django REST framework example
+
+## Under construction now
 
 ## Directory structure
 	
@@ -30,13 +32,11 @@
 					__init__.py
 					admin.py
 					models.py
+					permissions.py
+					seliarizers.py
+					tests.py
 					urls.py
 					views.py
-				extra/
-					__init__.py
-					templatetags
-						__init__.py
-						custom_filter.py
 				utils/
 					__init__.py
 					api.py
@@ -48,22 +48,6 @@
 				base.py
 				dev.py
 				prod.py
-			static/
-				css/
-					styles.scss
-					stlyes.css.map
-					styles.css
-				js/
-					webpack.config.js
-					index.js
-					module/
-						foo.js
-						bar.js
-					dist/
-						bundle.js
-						vendor.bundle.js
-			templates/
-				index.html
 </pre>
 
 
@@ -72,7 +56,7 @@
 #### Rename project and configure basic settings
 
 ~~~~
-$ mv django-sample-project/ /var/www/{YOUR PROJECT NAME}.com/
+$ mv django-rest-framework-example/ /var/www/{YOUR PROJECT NAME}.com/
 $ cd /var/www/{YOUR PROJECT NAME}.com/
 $ mv mysite/ {YOUR PROJECT NAME}/
 ~~~~
@@ -107,15 +91,6 @@ $ vi manage.py
 ~~~~
 $ cd {PROJECT PATH}/{PROJECT NAME}/
 $ vi wsgi.py
-~~~~
-
-- Select development mode or production mode
-
-~~~~
-$ cd {PROJECT PATH}
-$ vi package.json
-
-	:%s/mysite/{YOUR PROJECT NAME}/g
 ~~~~
 
 

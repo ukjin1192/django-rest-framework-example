@@ -1,1 +1,0 @@
-{"url":"http://127.0.0.1:8000/users/4/","id":4,"email":"user4@gmail.com","username":"user4","is_active":true,"date_joined":"2015-12-07T08:35:15Z","last_login":"2015-12-08T17:24:59Z","articles":["http://127.0.0.1:8000/articles/12/","http://127.0.0.1:8000/articles/8/"],"comments":[]}
