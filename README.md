@@ -1,6 +1,4 @@
-# Django REST framework example
-
-## Under construction now
+# Django REST framework example (Under construction now)
 
 ## Directory structure
 	
@@ -92,6 +90,8 @@ $ vi manage.py
 $ cd {PROJECT PATH}/{PROJECT NAME}/
 $ vi wsgi.py
 ~~~~
+
+- Select development mode or production mode
 
 
 #### Fill out sensitive data

@@ -36,7 +36,10 @@ def stop_uwsgi():
 
 def run_shell():
     with lcd(ROOT_DIR):
-        local("./manage.py shell")
+        try:
+            local("./manage.py shell_plus")
+        except:
+            local("./manage.py shell")
 
 
 def run_dbshell():
@@ -47,6 +50,11 @@ def run_dbshell():
 def run_server():
     with lcd(ROOT_DIR):
         local("./manage.py runserver 0.0.0.0:8000")
+
+
+def run_test():
+    with lcd(ROOT_DIR):
+        local("./manage.py test main")
 
 
 def run_celery():

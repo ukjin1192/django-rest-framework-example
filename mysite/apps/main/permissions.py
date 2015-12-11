@@ -13,7 +13,6 @@ class UserPermission(permissions.BasePermission):
     Partial update : own self or admin
     Destroy : admin only
     """
-
     def has_permission(self, request, view):
         if view.action == 'list':
             return request.user.is_authenticated() and request.user.is_admin
@@ -45,10 +44,10 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         # Anyone can read (HTTP method : GET, HEAD, and OPTIONS)
         if request.method in permissions.SAFE_METHODS:
             return True
-
+        
         # Only admin can delete (HTTP method : DELETE)
         if request.method == 'DELETE':
             return request.user.is_admin
-
+        
         # Only author can create and update (HTTP method : POST, PUT, PATCH)
         return obj.author == request.user

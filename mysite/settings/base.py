@@ -81,7 +81,6 @@ TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
 INSTALLED_APPS += (
     'main',
     'utils',
-    'extra',
 )   
 
 # Middlewares
