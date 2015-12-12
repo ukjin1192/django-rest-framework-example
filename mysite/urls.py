@@ -2,6 +2,7 @@
 
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from main import views
 from rest_framework.routers import DefaultRouter
 
@@ -22,5 +23,8 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', 'rest_framework')),
 
     # Router
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
+
+    # Front-end page
+    url(r'^', TemplateView.as_view(template_name='index.html')),
 )
