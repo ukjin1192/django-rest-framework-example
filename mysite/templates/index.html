@@ -6,8 +6,121 @@
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 </head>
 <body>
-  <div id="hello-world">
-    Hello world
+  <div>
+    <h1>Sample front-end page for testing</h1>
+    {% if request.user.is_authenticated %}
+    <h3>Logged in - User ID {{ request.user.id }}</h3>
+    {% else %}
+    <h3>Not logged in</h3>
+    {% endif %}
   </div>
+  <hr/>
+  <div>
+    <h2>Signup</h2>
+    <form id="signup-form">
+      <input type="email" name="email" placeholder="username@domain.com" required />
+      <input type="text" name="username" placeholder="username" required />
+      <input type="password" name="password" placeholder="password" required />
+      <input type="submit" value="Signup" />
+    </form>
+  </div>
+  <hr/>
+  <div>
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="email" name="email" placeholder="username@domain.com" required />
+      <input type="password" name="password" placeholder="password" required />
+      <input type="submit" value="Login" />
+    </form>
+  </div>
+  <hr/>
+  <div>
+    <h2>Logout</h2>
+    <button id="logout-btn">Logout</button>
+  </div>
+  <hr/>
+  <div>
+    <h2>Get user profile</h2>
+    <button id="user-profile-btn">Get user profile</button>
+  </div>
+  <hr/>
+  <div>
+    <h2>Update user profile</h2>
+    <form id="update-user-form">
+      <input type="email" name="email" placeholder="new email" />
+      <input type="text" name="username" placeholder="new username" />
+      <input type="password" name="original-password" placeholder="original password" />
+      <input type="password" name="password" placeholder="new password" />
+      <input type="checkbox" name="is_active" />deactivate account
+      <input type="submit" value="Update" />
+    </form>
+  </div>
+  <hr/>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script type="text/javascript">
+    'use strict';
+    
+    function send_ajax_request(permalink, method, data) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRFToken': $.cookie('csrftoken')
+        }
+      });
+      
+      $.ajax({
+        url: permalink,
+        type: method,
+        data: data,
+        contentType: false,
+        processData: false
+      }).done(function(data) {
+        console.log(data);
+      }); 
+    };
+    
+    $(document).on('submit', '#signup-form', function(event) {
+      event.preventDefault();
+      
+      var formData = new FormData();
+      formData.append('email', $(this).find('[name="email"]').val());
+      formData.append('username', $(this).find('[name="username"]').val());
+      formData.append('password', $(this).find('[name="password"]').val());
+      
+      send_ajax_request('/api/users/', 'POST', formData);
+    });
+    
+    $(document).on('submit', '#login-form', function(event) {
+      event.preventDefault();
+      
+      var formData = new FormData();
+      formData.append('email', $(this).find('[name="email"]').val());
+      formData.append('password', $(this).find('[name="password"]').val());
+      
+      send_ajax_request('/api/login/', 'POST', formData);
+    });
+    
+    $(document).on('click', '#logout-btn', function() {
+      send_ajax_request('/api/logout/', 'GET', null);
+    });
+    
+    $(document).on('click', '#user-profile-btn', function() {
+      send_ajax_request('/api/users/{{ request.user.id }}/', 'GET', null);
+    });
+    
+    $(document).on('submit', '#update-user-form', function(event) {
+      event.preventDefault();
+      
+      var formData = new FormData();
+      
+      if ($(this).find('[name="email"]').val() != '') formData.append('email', $(this).find('[name="email"]').val());
+      if ($(this).find('[name="username"]').val() != '') formData.append('username', $(this).find('[name="username"]').val());
+      if ($(this).find('[name="original-password"]').val() != '') formData.append('original-password', $(this).find('[name="original-password"]').val());
+      if ($(this).find('[name="password"]').val() != '') formData.append('password', $(this).find('[name="password"]').val());
+      if ($(this).find('[name="is_active"]').is(':checked') == true) formData.append('is_active', false);
+      
+      send_ajax_request('/api/users/{{ request.user.id }}/', 'PATCH', formData);
+    });
+  </script>
 </body>
 </html>

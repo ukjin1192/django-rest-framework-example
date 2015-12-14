@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import api_root, UserViewSet, ArticleViewSet, CommentViewSet
-from rest_framework.urlpatterns import format_suffix_patterns
+from main.views import api_root, user_login, user_logout, UserViewSet, ArticleViewSet, CommentViewSet
 
 
 user_list = UserViewSet.as_view({
@@ -36,11 +35,18 @@ comment_detail = CommentViewSet.as_view({
     'delete': 'destroy'
 })
 
-
-urlpatterns = format_suffix_patterns([
+urlpatterns = [
     url(
         r'^$', 
         api_root
+    ),
+    url(
+        r'^login/$', 
+        user_login
+    ),
+    url(
+        r'^logout/$', 
+        user_logout
     ),
     url(
         r'^users/$',
@@ -72,4 +78,4 @@ urlpatterns = format_suffix_patterns([
         comment_detail,
         name='comment-detail'
     ),
-])
+]
