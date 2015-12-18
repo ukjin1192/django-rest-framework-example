@@ -12,7 +12,6 @@ ALLOWED_HOSTS = [
 INTERNAL_IPS = (
     '127.0.0.1',
 )
-DEVELOPMENT_MODE = True
 
 # Database
 DATABASES = {
@@ -37,3 +36,12 @@ CACHES = {
         }
     }
 }
+
+# Live profiling and inspection tool
+MIDDLEWARE_CLASSES += (
+    'silk.middleware.SilkyMiddleware',
+)
+
+INSTALLED_APPS += (
+    'silk',
+)
