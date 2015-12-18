@@ -13,11 +13,6 @@ urlpatterns = [
         r'^admin/', 
         include(admin.site.urls)
     ),
-    # REST framework login and logout
-    url(
-        r'^api-auth/', 
-        include('rest_framework.urls', 'rest_framework')
-    ),
     # Main application
     url(
         r'^api/', 

@@ -8,11 +8,7 @@
 <body>
   <div>
     <h1>Sample front-end page for testing</h1>
-    {% if request.user.is_authenticated %}
-    <h3>Logged in - User ID {{ request.user.id }}</h3>
-    {% else %}
-    <h3>Not logged in</h3>
-    {% endif %}
+    <span id="login-info"></span>
   </div>
   <hr/>
   <div>
@@ -51,7 +47,7 @@
       <input type="text" name="username" placeholder="new username" />
       <input type="password" name="original-password" placeholder="original password" />
       <input type="password" name="password" placeholder="new password" />
-      <input type="checkbox" name="is_active" />deactivate account
+      <input type="checkbox" name="deactivate" />deactivate account
       <input type="submit" value="Update" />
     </form>
   </div>
@@ -61,65 +57,167 @@
   <script type="text/javascript">
     'use strict';
     
-    function send_ajax_request(permalink, method, data) {
+    function setCSRFToken() {
       $.ajaxSetup({
         headers: {
           'X-CSRFToken': $.cookie('csrftoken')
         }
       });
+    }
+    
+    function setAuthToken() {
+      $.ajaxSetup({
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('token')
+        }
+      });
+    }
+    
+    function clearAuthToken() {
+      $.ajaxSetup({
+        headers: {
+          'Authorization': null
+        }
+      });
+    }
+    
+    function loginAndGetToken(data) {
+      setCSRFToken();
       
       $.ajax({
-        url: permalink,
-        type: method,
+        url: '/api/authentication/',
+        type: 'POST',
         data: data,
         contentType: false,
         processData: false
       }).done(function(data) {
         console.log(data);
+        localStorage.setItem('token', data['token']);
+        localStorage.setItem('user_id', data['user_id']);
+        localStorage.setItem('email', data['email']);
+        localStorage.setItem('username', data['username']);
+      }).fail(function(data) {
+        console.log(data);
       }); 
-    };
+    }
     
     $(document).on('submit', '#signup-form', function(event) {
       event.preventDefault();
       
+      var signupForm = $(this);
       var formData = new FormData();
-      formData.append('email', $(this).find('[name="email"]').val());
-      formData.append('username', $(this).find('[name="username"]').val());
-      formData.append('password', $(this).find('[name="password"]').val());
+      var loginData = new FormData();
       
-      send_ajax_request('/api/users/', 'POST', formData);
+      formData.append('email', signupForm.find('[name="email"]').val());
+      formData.append('username', signupForm.find('[name="username"]').val());
+      formData.append('password', signupForm.find('[name="password"]').val());
+      
+      loginData.append('username', signupForm.find('[name="email"]').val());
+      loginData.append('password', signupForm.find('[name="password"]').val());
+      
+      setCSRFToken();
+      
+      $.ajax({
+        url: '/api/users/',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false
+      }).done(function(data) {
+        loginAndGetToken(loginData);
+      }).fail(function(data) {
+        console.log('Login failed');
+        console.log(data);
+      }); 
     });
     
     $(document).on('submit', '#login-form', function(event) {
       event.preventDefault();
       
+      var loginForm = $(this);
       var formData = new FormData();
-      formData.append('email', $(this).find('[name="email"]').val());
-      formData.append('password', $(this).find('[name="password"]').val());
       
-      send_ajax_request('/api/login/', 'POST', formData);
+      formData.append('username', loginForm.find('[name="email"]').val());
+      formData.append('password', loginForm.find('[name="password"]').val());
+      
+      loginAndGetToken(formData);
     });
     
     $(document).on('click', '#logout-btn', function() {
-      send_ajax_request('/api/logout/', 'GET', null);
+      clearAuthToken();
+      localStorage.clear();
     });
     
     $(document).on('click', '#user-profile-btn', function() {
-      send_ajax_request('/api/users/{{ request.user.id }}/', 'GET', null);
+      if (localStorage.getItem('user_id') != null) {
+        var userID = localStorage.getItem('user_id');
+        
+        setCSRFToken();
+        setAuthToken();
+        
+        $.ajax({
+          url: '/api/users/' + userID + '/',
+          type: 'GET'
+        }).done(function(data) {
+          console.log(data);
+        }).fail(function(data) {
+          console.log('Get user profile failed');
+          console.log(data);
+        }); 
+      }
     });
     
     $(document).on('submit', '#update-user-form', function(event) {
       event.preventDefault();
       
-      var formData = new FormData();
-      
-      if ($(this).find('[name="email"]').val() != '') formData.append('email', $(this).find('[name="email"]').val());
-      if ($(this).find('[name="username"]').val() != '') formData.append('username', $(this).find('[name="username"]').val());
-      if ($(this).find('[name="original-password"]').val() != '') formData.append('original-password', $(this).find('[name="original-password"]').val());
-      if ($(this).find('[name="password"]').val() != '') formData.append('password', $(this).find('[name="password"]').val());
-      if ($(this).find('[name="is_active"]').is(':checked') == true) formData.append('is_active', false);
-      
-      send_ajax_request('/api/users/{{ request.user.id }}/', 'PATCH', formData);
+      if (localStorage.getItem('user_id') != null) {
+        var userID = localStorage.getItem('user_id');
+        var updateUserForm = $(this);
+        var formData = new FormData();
+        
+        if (updateUserForm.find('[name="email"]').val() != '') formData.append('email', updateUserForm.find('[name="email"]').val());
+        if (updateUserForm.find('[name="username"]').val() != '') formData.append('username', updateUserForm.find('[name="username"]').val());
+        if (updateUserForm.find('[name="original-password"]').val() != '' && updateUserForm.find('[name="password"]').val() != '') {
+          formData.append('original-password', updateUserForm.find('[name="original-password"]').val());
+          formData.append('password', updateUserForm.find('[name="password"]').val());
+        }
+        if (updateUserForm.find('[name="deactivate"]').is(':checked') == true) formData.append('is_active', false);
+        
+        setCSRFToken();
+        setAuthToken();
+        
+        $.ajax({
+          url: '/api/users/' + userID + '/',
+          type: 'PATCH',
+          data: formData,
+          contentType: false,
+          processData: false
+        }).done(function(data) {
+          console.log(data);
+          if (updateUserForm.find('[name="email"]').val() != '') localStorage.setItem('email', updateUserForm.find('[name="email"]').val());
+          if (updateUserForm.find('[name="username"]').val() != '') localStorage.setItem('username', updateUserForm.find('[name="username"]').val());
+          if (updateUserForm.find('[name="original-password"]').val() != '' && updateUserForm.find('[name="password"]').val() != '') {
+            clearAuthToken();
+            
+            var loginData = new FormData();
+            
+            loginData.append('username', localStorage.getItem('email'));
+            loginData.append('password', updateUserForm.find('[name="password"]').val());
+            
+            loginAndGetToken(loginData);
+          }
+          if (updateUserForm.find('[name="deactivate"]').is(':checked') == true) localStorage.clear();
+        }).fail(function(data) {
+          console.log('Update user profile failed');
+          console.log(data);
+        }); 
+      }
+    });
+    
+    $(document).ready(function() {
+      if (localStorage.getItem('email') != null) {
+        $('#login-info').text(localStorage.getItem('email'));
+      }
     });
   </script>
 </body>

@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from rest_framework.authtoken.models import Token
 
 
 class MyUserManager(BaseUserManager):
@@ -103,6 +106,11 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+    """
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+    """
+
 
 class Article(models.Model):
     """
@@ -151,6 +159,15 @@ class Article(models.Model):
 
     def __unicode__(self):
         return unicode(self.title) or u''
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """
+    Create token for authentication when user object is created
+    """
+    if created:
+        Token.objects.create(user=instance)
 
 
 class Comment(models.Model):
