@@ -36,12 +36,3 @@ CACHES = {
         }
     }
 }
-
-# Live profiling and inspection tool
-MIDDLEWARE_CLASSES += (
-    'silk.middleware.SilkyMiddleware',
-)
-
-INSTALLED_APPS += (
-    'silk',
-)

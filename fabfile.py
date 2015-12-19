@@ -75,6 +75,11 @@ def clear_celery_tasks():
         local("./manage.py celery purge")
 
 
+def clear_silk_logs():
+    with lcd(ROOT_DIR):
+        local("./manage.py silk_clear_request_log")
+
+
 def update_staticfiles():
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")
