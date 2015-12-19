@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from django.core.urlresolvers import reverse
+from django.test import modify_settings
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
-from main.models import User
+from main.models import User 
 
 OWN_SELF_USERNAME = 'own_self'
 NORMAL_USER_USERNAME = 'normal_user'
@@ -15,16 +16,28 @@ ORIGINAL_PASSWORD = 'foo'
 NEW_PASSWORD = 'bar'
 
 
+@modify_settings(MIDDLEWARE_CLASSES = {
+    'remove': 'silk.middleware.SilkyMiddleware',
+})
 class UserPermissionTests(APITestCase):
-
+    
     def setUp(self):
         """
         Run before every test case
         Create normal user, another user, and admin
         """
-        User.objects.create_user(email=OWN_SELF_USERNAME + '@domain.com', username=OWN_SELF_USERNAME, password=ORIGINAL_PASSWORD)
-        User.objects.create_user(email=NORMAL_USER_USERNAME + '@domain.com', username=NORMAL_USER_USERNAME, password=ORIGINAL_PASSWORD)
-        User.objects.create_superuser(email=ADMIN_USERNAME + '@domain.com', username=ADMIN_USERNAME, password=ORIGINAL_PASSWORD)
+        User.objects.create_user(
+                email=OWN_SELF_USERNAME + '@domain.com', 
+                username=OWN_SELF_USERNAME, 
+                password=ORIGINAL_PASSWORD)
+        User.objects.create_user(
+                email=NORMAL_USER_USERNAME + '@domain.com', 
+                username=NORMAL_USER_USERNAME, 
+                password=ORIGINAL_PASSWORD)
+        User.objects.create_superuser(
+                email=ADMIN_USERNAME + '@domain.com', 
+                username=ADMIN_USERNAME, 
+                password=ORIGINAL_PASSWORD)
         self.client = APIClient()
 
     def tearDown(self):
@@ -44,13 +57,14 @@ class UserPermissionTests(APITestCase):
         
         # 1. No authentication
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         
         # 2. Authentication with normal user
         user = User.objects.get(username=NORMAL_USER_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         self.client.force_authenticate(user=None)
         
         # 3. Authentication with admin
@@ -79,9 +93,6 @@ class UserPermissionTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['email'], NEW_USER_USERNAME + '@domain.com')
         self.assertEqual(response.data['username'], NEW_USER_USERNAME)
-        # Check password is saved after hashed by login
-        self.client.login(email=NEW_USER_USERNAME + '@domain.com', password=ORIGINAL_PASSWORD)
-        self.assertIn('_auth_user_id', self.client.session)
         self.client.force_authenticate(user=None)
 
     def test_retrieve_user(self):
@@ -90,17 +101,17 @@ class UserPermissionTests(APITestCase):
         Permission : own self or admin
         """
         # GET /users/{pk}/
-        url = '/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
+        url = '/api/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
         
         # 1. No authentication
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         
         # 2. Authentication with another user
         user = User.objects.get(username=NORMAL_USER_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         self.client.force_authenticate(user=None)
         
         # 3. Authentication own self
@@ -127,27 +138,35 @@ class UserPermissionTests(APITestCase):
         Permission : own self or admin
         """
         # PUT /users/{pk}/
-        url = '/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
+        url = '/api/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
         
         # 1. No authentication
         response = self.client.put(url, 
-                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 'username': EDIT_PREFIX + OWN_SELF_USERNAME, 'password': NEW_PASSWORD}, 
+                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 
+                    'username': EDIT_PREFIX + OWN_SELF_USERNAME, 
+                    'original-password': ORIGINAL_PASSWORD,
+                    'password': NEW_PASSWORD}, 
                 format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         
         # 2. Authentication with another user
         user = User.objects.get(username=NORMAL_USER_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.put(url, 
-                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 'username': EDIT_PREFIX + OWN_SELF_USERNAME, 'password': NEW_PASSWORD}, 
+                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 
+                    'username': EDIT_PREFIX + OWN_SELF_USERNAME, 
+                    'original-password': ORIGINAL_PASSWORD,
+                    'password': NEW_PASSWORD}, 
                 format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         self.client.force_authenticate(user=None)
         
         # 3. Authentication own self (Required fields are not filled)
         user = User.objects.get(username=OWN_SELF_USERNAME)
         self.client.force_authenticate(user=user)
-        response = self.client.put(url, {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', }, format='json')
+        response = self.client.put(url, 
+                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', }, 
+                format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.client.force_authenticate(user=None)
         
@@ -155,28 +174,28 @@ class UserPermissionTests(APITestCase):
         user = User.objects.get(username=OWN_SELF_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.put(url, 
-                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 'username': EDIT_PREFIX + OWN_SELF_USERNAME, 'password': NEW_PASSWORD}, 
+                {'email': EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', 
+                    'username': EDIT_PREFIX + OWN_SELF_USERNAME, 
+                    'original-password': ORIGINAL_PASSWORD,
+                    'password': NEW_PASSWORD}, 
                 format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com')
         self.assertEqual(response.data['username'], EDIT_PREFIX + OWN_SELF_USERNAME)
-        # Check password is saved after hashed by login
-        self.client.login(email=EDIT_PREFIX + OWN_SELF_USERNAME + '@domain.com', password=NEW_PASSWORD)
-        self.assertIn('_auth_user_id', self.client.session)
         self.client.force_authenticate(user=None)
         
         # 5. Authentication with admin
         user = User.objects.get(username=ADMIN_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.put(url, 
-                {'email': OWN_SELF_USERNAME + '@domain.com', 'username': OWN_SELF_USERNAME, 'password': ORIGINAL_PASSWORD}, 
+                {'email': OWN_SELF_USERNAME + '@domain.com', 
+                    'username': OWN_SELF_USERNAME, 
+                    'original-password': NEW_PASSWORD,
+                    'password': ORIGINAL_PASSWORD}, 
                 format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], OWN_SELF_USERNAME + '@domain.com')
         self.assertEqual(response.data['username'], OWN_SELF_USERNAME)
-        # Check password is saved after hashed by login
-        self.client.login(email=OWN_SELF_USERNAME + '@domain.com', password=ORIGINAL_PASSWORD)
-        self.assertIn('_auth_user_id', self.client.session)
         self.client.force_authenticate(user=None)
 
     def test_partial_update_user(self):
@@ -185,17 +204,17 @@ class UserPermissionTests(APITestCase):
         Permission : own self or admin
         """
         # PATCH /users/{pk}/
-        url = '/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
+        url = '/api/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
         
         # 1. No authentication
         response = self.client.patch(url, {'username': EDIT_PREFIX + OWN_SELF_USERNAME, }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         
         # 2. Authentication with another user
         user = User.objects.get(username=NORMAL_USER_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.patch(url, {'username': EDIT_PREFIX + OWN_SELF_USERNAME, }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         self.client.force_authenticate(user=None)
         
         # 3. Authentication own self
@@ -220,17 +239,17 @@ class UserPermissionTests(APITestCase):
         Permission : admin only
         """
         # DELETE /users/{pk}/
-        url = '/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
+        url = '/api/users/' + str(User.objects.get(username=OWN_SELF_USERNAME).id) + '/'
         
         # 1. No authentication
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         
         # 2. Authentication own self
         user = User.objects.get(username=OWN_SELF_USERNAME)
         self.client.force_authenticate(user=user)
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
         self.client.force_authenticate(user=None)
         
         # 3. Authentication with admin
