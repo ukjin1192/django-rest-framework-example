@@ -6,8 +6,6 @@ from main.models import User, Article, Comment
 from main.permissions import UserPermission, IsAuthorOrReadOnly
 from main.serializers import UserSerializer, ArticleSerializer, CommentSerializer
 from rest_framework import parsers, permissions, renderers, status, viewsets
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,28 +23,6 @@ def api_root(request, format=None):
     })
 
 
-class ObtainAuthToken(APIView):
-    """
-    Override authtoken view to return user ID together
-    """
-    throttle_classes = ()
-    permission_classes = ()
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
-    renderer_classes = (renderers.JSONRenderer,)
-    serializer_class = AuthTokenSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key, 
-            'user_id': token.user.id,
-            'email': token.user.email,
-            'username': token.user.username})
-
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for user object
@@ -59,11 +35,12 @@ class UserViewSet(viewsets.ModelViewSet):
         password = make_password(self.request.data['password'])
         serializer.save(password=password, is_active=True)
 
+    # Note that update USERNAME_FIELD(=email) or password will refresh authentication token
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         
-        if 'password' in self.request.data:
+        if 'email' in self.request.data or 'password' in self.request.data or 'is_active' in self.request.data:
             if 'original-password' not in self.request.data:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             if instance.check_password(self.request.data['original-password']) == False:
@@ -74,13 +51,6 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        
-        if 'password' in self.request.data:
-            Token.objects.filter(user=instance).delete()
-            Token.objects.create(user=instance)
-        
-        if 'is_active' in self.request.data and self.request.data['is_active'] == (False or 'false'):
-            Token.objects.filter(user=instance).delete()
         
         return Response(serializer.data)
 

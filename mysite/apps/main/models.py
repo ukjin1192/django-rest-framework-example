@@ -7,7 +7,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from rest_framework.authtoken.models import Token
 
 
 class MyUserManager(BaseUserManager):
@@ -162,12 +161,13 @@ class Article(models.Model):
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
+def do_something_when_user_created(sender, instance=None, created=False, **kwargs):
     """
-    Create token for authentication when user object is created
+    Do something when user created
     """
     if created:
-        Token.objects.create(user=instance)
+        user_obj = instance
+        pass
 
 
 class Comment(models.Model):

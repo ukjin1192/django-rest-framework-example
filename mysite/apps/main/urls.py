@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import api_root, ObtainAuthToken, UserViewSet, ArticleViewSet, CommentViewSet
+from main.views import api_root, UserViewSet, ArticleViewSet, CommentViewSet
 
 
 user_list = UserViewSet.as_view({
@@ -39,10 +39,6 @@ urlpatterns = [
     url(
         r'^$', 
         api_root
-    ),
-    url(
-        r'^authentication/', 
-        ObtainAuthToken.as_view()
     ),
     url(
         r'^users/$',

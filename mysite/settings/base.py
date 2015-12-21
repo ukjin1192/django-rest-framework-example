@@ -6,7 +6,9 @@ import djcelery
 import os
 import rest_framework
 import sys
+from datetime import timedelta
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
 
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 PROJECT_NAME = os.path.basename(PROJECT_DIR)
@@ -70,12 +72,13 @@ SECRET_KEY = config.get('django', 'secret_key')
 
 # Defualt applications
 INSTALLED_APPS = (
-    # django-suit should come before 'django.contrib.admin'
+    # Suit is custom admin interface
+    # Should come before 'django.contrib.admin'
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    #'django.contrib.sessions',
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 )
@@ -94,7 +97,8 @@ INSTALLED_APPS += (
 
 # Middlewares
 MIDDLEWARE_CLASSES = (
-    # Live profiling and inspection tool. Should be the first placement
+    # Silk is live profiling and inspection tool
+    # Should be the first placement
     'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # LocaleMiddleware should come after SessionMiddleware & CacheMiddleware
@@ -117,7 +121,6 @@ INSTALLED_APPS += (
     'django_extensions',
     'redisboard',
     'rest_framework',
-    'rest_framework.authtoken',
 )
 
 # REST framework settings
@@ -125,8 +128,23 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     )
+}
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_id': user.id,
+        'email': user.email,
+        'username': user.username
+    }
+
+# Django REST framework JWT settings
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
+    'JWT_EXPIRATION_DELTA': timedelta(days=100),
 }
 
 # Extend default user class
