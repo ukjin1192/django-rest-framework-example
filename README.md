@@ -57,10 +57,15 @@
 					styles.map
 					styles.css
 				js/
-					webpack.config.js
 					index.js
+					webpack.config.js
 					module/
-							foo.js
+							obtainAuthToken.js
+							verifyAuthToken.js
+							setAuthToken.js
+							refreshAuthToken.js
+							clearAuthToken.js
+							setCSRFToken.js
 					dist/
 							bundle.js
 							vendor.bundle.js

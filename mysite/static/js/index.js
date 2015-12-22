@@ -1,89 +1,12 @@
 'use strict';
 
 var $ = require('jquery');
-var foo = require('./module/foo');
-
-console.log(foo(1,2,3,4));
-
-function setCSRFToken() {
-  $.ajaxSetup({
-    headers: {
-      'X-CSRFToken': $.cookie('csrftoken')
-    }
-  });
-}
-
-function setAuthToken() {
-  $.ajaxSetup({
-    headers: {
-      'Authorization': 'JWT ' + localStorage.getItem('token')
-    }
-  });
-}
-
-function clearAuthToken() {
-  $.ajaxSetup({
-    headers: {
-      'Authorization': null
-    }
-  });
-}
-
-function obtainAuthToken(data) {
-  setCSRFToken();
-  
-  $.ajax({
-    url: '/api-token-auth/',
-    type: 'POST',
-    data: data,
-    contentType: false,
-    processData: false
-  }).done(function(data) {
-    console.log(data);
-    localStorage.setItem('token', data['token']);
-    localStorage.setItem('user_id', data['user_id']);
-    localStorage.setItem('email', data['email']);
-    localStorage.setItem('username', data['username']);
-  }).fail(function(data) {
-    console.log(data);
-  }); 
-}
-
-function refreshAuthToken() {
-  setCSRFToken();
-  
-  $.ajax({
-    url: '/api-token-refresh/',
-    type: 'POST',
-    data: {
-      'token': localStorage.getItem('token')
-    }
-  }).done(function(data) {
-    console.log(data);
-    localStorage.setItem('token', data['token']);
-  }).fail(function(data) {
-    console.log(data);
-  }); 
-}
-
-function verifyAuthToken() {
-  setCSRFToken();
-  
-  $.ajax({
-    url: '/api-token-verify/',
-    type: 'POST',
-    data: {
-      'token': localStorage.getItem('token')
-    }
-  }).done(function(data) {
-    console.log(data);
-    $('#login-info').text(localStorage.getItem('email'));
-  }).fail(function(data) {
-    console.log(data);
-    $('#login-info').text('Not logged in');
-    localStorage.clear();
-  }); 
-}
+var setCSRFToken = require('./module/setCSRFToken');
+var setAuthToken = require('./module/setAuthToken');
+var clearAuthToken = require('./module/clearAuthToken');
+var obtainAuthToken = require('./module/obtainAuthToken');
+var refreshAuthToken = require('./module/refreshAuthToken');
+var verifyAuthToken = require('./module/verifyAuthToken');
 
 $(document).on('submit', '#signup-form', function(event) {
   event.preventDefault();

@@ -5,89 +5,12 @@ webpackJsonp([0],[
 	'use strict';
 
 	var $ = __webpack_require__(1);
-	var foo = __webpack_require__(2);
-
-	console.log(foo(1,2,3,4));
-
-	function setCSRFToken() {
-	  $.ajaxSetup({
-	    headers: {
-	      'X-CSRFToken': $.cookie('csrftoken')
-	    }
-	  });
-	}
-
-	function setAuthToken() {
-	  $.ajaxSetup({
-	    headers: {
-	      'Authorization': 'JWT ' + localStorage.getItem('token')
-	    }
-	  });
-	}
-
-	function clearAuthToken() {
-	  $.ajaxSetup({
-	    headers: {
-	      'Authorization': null
-	    }
-	  });
-	}
-
-	function obtainAuthToken(data) {
-	  setCSRFToken();
-	  
-	  $.ajax({
-	    url: '/api-token-auth/',
-	    type: 'POST',
-	    data: data,
-	    contentType: false,
-	    processData: false
-	  }).done(function(data) {
-	    console.log(data);
-	    localStorage.setItem('token', data['token']);
-	    localStorage.setItem('user_id', data['user_id']);
-	    localStorage.setItem('email', data['email']);
-	    localStorage.setItem('username', data['username']);
-	  }).fail(function(data) {
-	    console.log(data);
-	  }); 
-	}
-
-	function refreshAuthToken() {
-	  setCSRFToken();
-	  
-	  $.ajax({
-	    url: '/api-token-refresh/',
-	    type: 'POST',
-	    data: {
-	      'token': localStorage.getItem('token')
-	    }
-	  }).done(function(data) {
-	    console.log(data);
-	    localStorage.setItem('token', data['token']);
-	  }).fail(function(data) {
-	    console.log(data);
-	  }); 
-	}
-
-	function verifyAuthToken() {
-	  setCSRFToken();
-	  
-	  $.ajax({
-	    url: '/api-token-verify/',
-	    type: 'POST',
-	    data: {
-	      'token': localStorage.getItem('token')
-	    }
-	  }).done(function(data) {
-	    console.log(data);
-	    $('#login-info').text(localStorage.getItem('email'));
-	  }).fail(function(data) {
-	    console.log(data);
-	    $('#login-info').text('Not logged in');
-	    localStorage.clear();
-	  }); 
-	}
+	var setCSRFToken = __webpack_require__(2);
+	var setAuthToken = __webpack_require__(3);
+	var clearAuthToken = __webpack_require__(4);
+	var obtainAuthToken = __webpack_require__(5);
+	var refreshAuthToken = __webpack_require__(6);
+	var verifyAuthToken = __webpack_require__(7);
 
 	$(document).on('submit', '#signup-form', function(event) {
 	  event.preventDefault();
@@ -232,11 +155,141 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	var _ = __webpack_require__(3);
+	var $ = __webpack_require__(1);
 
-	module.exports = function sumList() {
-	    return _.sum(arguments);
-	};
+	module.exports = function setCSRFToken() {
+	  $.ajaxSetup({
+	    headers: {
+	      'X-CSRFToken': $.cookie('csrftoken')
+	    }
+	  });
+	  return;
+	}
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+
+	module.exports = function setAuthToken() {
+	  $.ajaxSetup({
+	    headers: {
+	      'Authorization': 'JWT ' + localStorage.getItem('token')
+	    }
+	  });
+	  return;
+	}
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+
+	module.exports = function clearAuthToken() {
+	  $.ajaxSetup({
+	    headers: {
+	      'Authorization': null
+	    }
+	  });
+	  return;
+	}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+	var setCSRFToken = __webpack_require__(2);
+
+	module.exports = function obtainAuthToken(data) {
+	  setCSRFToken();
+	  
+	  $.ajax({
+	    url: '/api-token-auth/',
+	    type: 'POST',
+	    data: data,
+	    contentType: false,
+	    processData: false
+	  }).done(function(data) {
+	    console.log(data);
+	    localStorage.setItem('token', data['token']);
+	    localStorage.setItem('user_id', data['user_id']);
+	    localStorage.setItem('email', data['email']);
+	    localStorage.setItem('username', data['username']);
+	  }).fail(function(data) {
+	    console.log(data);
+	  }); 
+	  return;
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+	var setCSRFToken = __webpack_require__(2);
+
+	module.exports = function refreshAuthToken() {
+	  setCSRFToken();
+	  
+	  $.ajax({
+	    url: '/api-token-refresh/',
+	    type: 'POST',
+	    data: {
+	      'token': localStorage.getItem('token')
+	    }
+	  }).done(function(data) {
+	    console.log(data);
+	    localStorage.setItem('token', data['token']);
+	  }).fail(function(data) {
+	    console.log(data);
+	  }); 
+	  return;
+	}
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+	var setCSRFToken = __webpack_require__(2);
+
+	module.exports = function verifyAuthToken() {
+	  setCSRFToken();
+	  
+	  $.ajax({
+	    url: '/api-token-verify/',
+	    type: 'POST',
+	    data: {
+	      'token': localStorage.getItem('token')
+	    }
+	  }).done(function(data) {
+	    console.log(data);
+	    $('#login-info').text(localStorage.getItem('email'));
+	  }).fail(function(data) {
+	    console.log(data);
+	    $('#login-info').text('Not logged in');
+	    localStorage.clear();
+	  }); 
+	  return;
+	}
 
 
 /***/ }
