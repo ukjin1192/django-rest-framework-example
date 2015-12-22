@@ -51,6 +51,9 @@ def ABS_PATH(*args):
 # Static files
 STATIC_ROOT = ABS_PATH('..', 'static')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    ABS_PATH('static'),
+)
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -73,7 +76,7 @@ SECRET_KEY = config.get('django', 'secret_key')
 # Defualt applications
 INSTALLED_APPS = (
     # Suit is custom admin interface
-    # Should come before 'django.contrib.admin'
+    # Suit should come before 'django.contrib.admin'
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',

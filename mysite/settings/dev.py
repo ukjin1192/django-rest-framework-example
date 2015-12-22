@@ -41,7 +41,7 @@ CACHES = {
 RUN_SILK = DEBUG
 
 if RUN_SILK:
-    # Should be the first placement
+    # Silk should be the first placement
     MIDDLEWARE_CLASSES = ('silk.middleware.SilkyMiddleware', ) + MIDDLEWARE_CLASSES
 
     INSTALLED_APPS += (

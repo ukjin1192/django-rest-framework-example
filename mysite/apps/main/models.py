@@ -111,6 +111,16 @@ class User(AbstractBaseUser):
     """
 
 
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def do_something_when_user_created(sender, instance=None, created=False, **kwargs):
+    """
+    Do something when user created
+    """
+    if created:
+        user_obj = instance
+        pass
+
+
 class Article(models.Model):
     """
     Article information
@@ -158,16 +168,6 @@ class Article(models.Model):
 
     def __unicode__(self):
         return unicode(self.title) or u''
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def do_something_when_user_created(sender, instance=None, created=False, **kwargs):
-    """
-    Do something when user created
-    """
-    if created:
-        user_obj = instance
-        pass
 
 
 class Comment(models.Model):
