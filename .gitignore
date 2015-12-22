@@ -46,3 +46,6 @@ sensitive/
 
 # Node modules:
 node_modules/
+
+# Distributed result of webpack
+dist/
