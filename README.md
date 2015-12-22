@@ -60,19 +60,22 @@
 					index.js
 					webpack.config.js
 					module/
-							obtainAuthToken.js
-							verifyAuthToken.js
-							setAuthToken.js
-							refreshAuthToken.js
-							clearAuthToken.js
-							setCSRFToken.js
-					dist/
-							bundle.js
-							vendor.bundle.js
+						obtainAuthToken.js
+						verifyAuthToken.js
+						setAuthToken.js
+						refreshAuthToken.js
+						clearAuthToken.js
+						setCSRFToken.js
 </pre>
 
 
 ## Installation
+
+- <a href="https://github.com/ukjin1192/web-stack-wiki-and-snippets/tree/master/ubuntu-basic-settings" target="_blank">Ubuntu basic settings</a>
+- <a href="https://github.com/ukjin1192/web-stack-wiki-and-snippets/tree/master/django-basic-settings" target="_blank">Django basic settings</a>
+- <a href="https://github.com/ukjin1192/web-stack-wiki-and-snippets/blob/master/utilities-wiki-and-snippets/manage-package-with-npm.md" target="_blank">NPM basic settings</a>
+- <a href="https://github.com/ukjin1192/web-stack-wiki-and-snippets/blob/master/utilities-wiki-and-snippets/use-webpack-as-module-bundler.md" target="_blank">Webpack basic settings</a>
+- <a href="https://github.com/ukjin1192/web-stack-wiki-and-snippets/blob/master/utilities-wiki-and-snippets/use-sass-for-stylesheet.md" target="_blank">SCSS basic settings</a>
 
 
 ## Customization
