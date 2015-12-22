@@ -36,3 +36,20 @@ CACHES = {
         }
     }
 }
+
+# Silk is live profiling and inspection tool
+RUN_SILK = DEBUG
+
+if RUN_SILK:
+    # Should be the first placement
+    MIDDLEWARE_CLASSES = ('silk.middleware.SilkyMiddleware', ) + MIDDLEWARE_CLASSES
+
+    INSTALLED_APPS += (
+        'silk',
+    )
+
+    # Silk settings
+    SILKY_AUTHENTICATION = True
+    SILKY_PERMISSIONS = lambda user: user.is_staff
+    SILKY_MAX_REQUEST_BODY_SIZE = -1        # Silk takes anything <0 as no limit
+    SILKY_MAX_RESPONSE_BODY_SIZE = 1024     # If response body>1024kb, ignore

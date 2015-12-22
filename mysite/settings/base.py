@@ -97,9 +97,6 @@ INSTALLED_APPS += (
 
 # Middlewares
 MIDDLEWARE_CLASSES = (
-    # Silk is live profiling and inspection tool
-    # Should be the first placement
-    'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # LocaleMiddleware should come after SessionMiddleware & CacheMiddleware
     # LocaleMiddleware should come before CommonMiddleware
@@ -116,7 +113,6 @@ MIDDLEWARE_CLASSES = (
 
 # 3rd-party applications
 INSTALLED_APPS += (
-    'silk',
     'djcelery',
     'django_extensions',
     'redisboard',
@@ -159,12 +155,6 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
 # Celery beat settings for cron tasks
 CELERY_IMPORTS = ('utils.cron',)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-
-# Silk settings
-SILKY_AUTHENTICATION = True
-SILKY_PERMISSIONS = lambda user: user.is_staff
-SILKY_MAX_REQUEST_BODY_SIZE = -1        # Silk takes anything <0 as no limit
-SILKY_MAX_RESPONSE_BODY_SIZE = 1024     # If response body>1024kb, ignore
 
 # Custom variables
 USER_EMAIL_MAX_LENGTH = 255
