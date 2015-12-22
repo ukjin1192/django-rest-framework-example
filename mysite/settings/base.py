@@ -9,7 +9,6 @@ import sys
 from datetime import timedelta
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
-
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 PROJECT_NAME = os.path.basename(PROJECT_DIR)
 ROOT_DIR = os.path.dirname(PROJECT_DIR)
@@ -116,11 +115,17 @@ MIDDLEWARE_CLASSES = (
 
 # 3rd-party applications
 INSTALLED_APPS += (
+    'compressor',
     'djcelery',
     'django_extensions',
     'redisboard',
     'rest_framework',
 )
+
+# User class settings
+AUTH_USER_MODEL = 'main.User'   # Extend default user class
+LOGIN_URL = '/'
+LOGOUT_URL = '/logout/'
 
 # REST framework settings
 REST_FRAMEWORK = {
@@ -146,10 +151,13 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(days=100),
 }
 
-# Extend default user class
-AUTH_USER_MODEL = 'main.User'
-LOGIN_URL = '/'
-LOGOUT_URL = '/logout/'
+# Compressor settings
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_OUTPUT_DIR = 'CACHE'
+STATICFILES_FINDERS += (
+    'compressor.finders.CompressorFinder',
+)
 
 # Celery settings for async tasks
 djcelery.setup_loader()

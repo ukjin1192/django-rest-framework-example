@@ -36,3 +36,6 @@ CACHES = {
         }
     }
 }
+
+# Compressor settings
+COMPRESS_ENABLED = not DEBUG

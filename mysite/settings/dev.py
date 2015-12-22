@@ -37,6 +37,9 @@ CACHES = {
     }
 }
 
+# Compressor settings
+COMPRESS_ENABLED = not DEBUG
+
 # Silk is live profiling and inspection tool
 RUN_SILK = DEBUG
 

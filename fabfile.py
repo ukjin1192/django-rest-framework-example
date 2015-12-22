@@ -83,6 +83,7 @@ def clear_silk_logs():
 def update_staticfiles():
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")
+        local("./manage.py compress --force")
 
 
 def remote_deploy():
