@@ -3,7 +3,7 @@
 ## Directory structure
 	
 <pre>
-	/var/www/mysite.com/
+	/var/www/budafoo.com/
 		.gitignore
 		manage.py
 		fabfile.py
@@ -13,7 +13,7 @@
 				nginx.dev.conf
 				nginx.prod.conf
 			uwsgi/
-				mysite.ini
+				budafoo.ini
 				uwsgi.conf
 			pip/
 				requirements.txt
@@ -21,7 +21,7 @@
 				configuration.ini
 				remote_server.pem
 		logs/
-		mysite/
+		budafoo/
 			__init__.py
 			urls.py
 			wsgi.py
@@ -37,7 +37,6 @@
 					views.py
 				utils/
 					__init__.py
-					api.py
 					cron.py
 					redis.py
 					utilities.py
@@ -56,22 +55,22 @@
 ~~~~
 $ mv django-rest-framework-example/ /var/www/{YOUR PROJECT NAME}.com/
 $ cd /var/www/{YOUR PROJECT NAME}.com/
-$ mv mysite/ {YOUR PROJECT NAME}/
+$ mv budafoo/ {YOUR PROJECT NAME}/
 ~~~~
 
 - Let `{PROJECT PATH}` as `/var/www/{YOUR PROJECT NAME}.com/`
 
 ~~~~
 $ cd {PROJECT PATH}/conf/uwsgi/
-$ mv mysite.ini {YOUR PROJECT NAME}.ini
+$ mv budafoo.ini {YOUR PROJECT NAME}.ini
 $ vi {YOUR PROJECT NAME}.ini
 
-	:%s/mysite/{YOUR PROJECT NAME}/g
+	:%s/budafoo/{YOUR PROJECT NAME}/g
 
 $ cd {PROJECT PATH}/conf/nginx/
 $ vi nginx.dev.conf nginx.prod.conf
 
-	:%s/mysite/{YOUR PROJECT NAME}/g
+	:%s/budafoo/{YOUR PROJECT NAME}/g
 ~~~~
 
 -	Edit value of `worker_processes` to `grep processor /proc/cpuinfo | wc -l`
