@@ -16,10 +16,9 @@
 <body>
   {% block container %}{% endblock %}
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
   {% compress js %}
-  <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/dist/vendor.bundle.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/dist/bundle.js' %}"></script>
   {% endcompress %}
 </body>
 </html>

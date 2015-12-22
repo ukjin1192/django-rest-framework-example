@@ -1,5 +1,10 @@
 'use strict';
 
+var $ = require('jquery');
+var foo = require('./module/foo');
+
+console.log(foo(1,2,3,4));
+
 function setCSRFToken() {
   $.ajaxSetup({
     headers: {

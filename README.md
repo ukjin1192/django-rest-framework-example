@@ -1,4 +1,4 @@
-# Django REST framework example (Under construction now)
+# Django REST framework example
 
 ## Directory structure
 	
@@ -8,6 +8,7 @@
 		manage.py
 		fabfile.py
 		robots.txt
+		package.json
 		conf/
 			nginx/
 				nginx.dev.conf
@@ -45,10 +46,31 @@
 				base.py
 				dev.py
 				prod.py
+			templates/
+				base.html
+				index.html
+				404.html
+				503.html
+			static/
+				css/
+					styles.scss
+					styles.map
+					styles.css
+				js/
+					webpack.config.js
+					index.js
+					module/
+							foo.js
+					dist/
+							bundle.js
+							vendor.bundle.js
 </pre>
 
 
-## Things that should be customized
+## Installation
+
+
+## Customization
 
 #### Rename project and configure basic settings
 
@@ -91,7 +113,6 @@ $ vi wsgi.py
 ~~~~
 
 - Select development mode or production mode
-
 
 #### Fill out sensitive data
 
