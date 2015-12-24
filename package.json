@@ -2,7 +2,7 @@
   "name": "mysite.com",
   "version": "0.0.0",
   "description": "Django REST Framework example",
-  "main": "index.js",
+  "main": "./mysite/static/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

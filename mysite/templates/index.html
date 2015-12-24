@@ -9,16 +9,6 @@
 </div>
 <hr/>
 <div>
-  <h2>Signup</h2>
-  <form id="signup-form">
-    <input type="email" name="email" placeholder="username@domain.com" required />
-    <input type="text" name="username" placeholder="username" required />
-    <input type="password" name="password" placeholder="password" required />
-    <input type="submit" value="Signup" />
-  </form>
-</div>
-<hr/>
-<div>
   <h2>Login</h2>
   <form id="login-form">
     <input type="email" name="email" placeholder="username@domain.com" required />
@@ -33,53 +23,123 @@
 </div>
 <hr/>
 <div>
-  <h2>Read user profile</h2>
-  <button id="user-profile-btn">Get user profile</button>
+  <h2>Create user</h2>
+  <form id="create-user-form">
+    <input type="email" name="email" placeholder="username@domain.com" required />
+    <input type="text" name="username" placeholder="username" required />
+    <input type="password" name="password" placeholder="password" required />
+    <input type="submit" value="Create" />
+  </form>
 </div>
 <hr/>
 <div>
-  <h2>Update user profile</h2>
-  <h4><em>Original password is required to update email or password or deactivate account</em></h4>
-  <form id="update-user-form">
-    <input type="email" name="email" placeholder="new email" />
-    <input type="text" name="username" placeholder="new username" />
-    <input type="password" name="original-password" placeholder="original password" />
-    <input type="password" name="password" placeholder="new password" />
-    <input type="checkbox" name="deactivate" />deactivate account
+  <h2>Read user</h2>
+	<button id="read-user-btn">Read</button>
+</div>
+<hr/>
+<div>
+  <h2>Update user email</h2>
+  <form id="update-user-email-form">
+    <input type="email" name="email" placeholder="new email" required />
+    <input type="password" name="original-password" placeholder="original password" required />
+    <input type="submit" value="Update" />
+  </form>
+</div>
+<hr/>
+  <h2>Update user username</h2>
+  <form id="update-user-username-form">
+    <input type="text" name="username" placeholder="new username" required />
+    <input type="submit" value="Update" />
+  </form>
+</div>
+<hr/>
+</div>
+  <h2>Update user password</h2>
+  <form id="update-user-password-form">
+    <input type="password" name="original-password" placeholder="original password" required />
+    <input type="password" name="password" placeholder="new password" required />
     <input type="submit" value="Update" />
   </form>
 </div>
 <hr/>
 <div>
+  <h2>Delete user</h2>
+  <h4><em>is_active=False</em></h4>
+  <form id="delete-user-form">
+    <input type="password" name="original-password" placeholder="password" required />
+    <input type="submit" value="Delete" />
+  </form>
+</div>
+<hr/>
+<div>
   <h2>Create article</h2>
+	<form id="create-article-form">
+    <input type="text" name="title" placeholder="title" required />
+		<textarea name="context" placeholder="context" required></textarea>
+    <input type="submit" value="Create" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Read article</h2>
+	<form id="read-article-form">
+		<input type="number" name="article-id" min="1" placeholder="article ID" required />
+    <input type="submit" value="Read" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Update article</h2>
+	<form id="update-article-form">
+		<input type="number" name="article-id" min="1" placeholder="article ID" required />
+    <input type="text" name="title" placeholder="title" required />
+		<textarea name="context" placeholder="context" required></textarea>
+    <input type="submit" value="Update" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Delete article</h2>
+	<h4><em>state='deleted'</em></h4>
+	<form id="delete-article-form">
+		<input type="number" name="article-id" min="1" placeholder="article ID" required />
+    <input type="submit" value="Delete" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Create comment</h2>
+	<form id="create-comment-form">
+		<input type="number" name="article-id" min="1" placeholder="article ID" required />
+		<textarea name="context" placeholder="context" required></textarea>
+    <input type="submit" value="Create" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Read comment</h2>
+	<form id="read-comment-form">
+		<input type="number" name="comment-id" min="1" placeholder="comment ID" required />
+    <input type="submit" value="Read" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Update comment</h2>
+	<form id="update-comment-form">
+		<input type="number" name="comment-id" min="1" placeholder="comment ID" required />
+		<textarea name="context" placeholder="context" required></textarea>
+    <input type="submit" value="Update" />
+	</form>
 </div>
 <hr/>
 <div>
   <h2>Delete comment</h2>
+	<h4><em>state='deleted'</em></h4>
+	<form id="delete-comment-form">
+		<input type="number" name="comment-id" min="1" placeholder="comment ID" required />
+    <input type="submit" value="Delete" />
+	</form>
 </div>
 <hr/>
 {% endblock %}
