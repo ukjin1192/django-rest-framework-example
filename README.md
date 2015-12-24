@@ -116,6 +116,12 @@ $ vi manage.py
 - Select development mode or production mode
 
 ~~~~
+$ vi package.json
+
+	:%s/mysite/{YOUR PROJECT NAME}/g
+~~~~
+
+~~~~
 $ cd {PROJECT PATH}/{PROJECT NAME}/
 $ vi wsgi.py
 ~~~~

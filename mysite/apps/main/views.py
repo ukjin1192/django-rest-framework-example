@@ -66,7 +66,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     """
     Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for article object
     """
-    queryset = Article.objects.filter(state='shown')
+    queryset = Article.objects.select_related('author').prefetch_related('comments').filter(state='shown')
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
@@ -78,7 +78,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for comment object
     """
-    queryset = Comment.objects.filter(state='shown')
+    queryset = Comment.objects.select_related('author').select_related('article').filter(state='shown')
     serializer_class = CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
