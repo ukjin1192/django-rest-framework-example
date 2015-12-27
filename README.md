@@ -1,5 +1,52 @@
 # Django REST framework example
 
+## Stack
+
+- Back-end
+  - Nginx : Web server
+  - uWSGI : Connect web server and application server
+  - Django REST framework (v3.2) : Application server
+	- MySQL : Relational DB
+	- Redis : In-memory DB
+	- Celery : Async task manager
+	- Fabric : Deploy tool
+- Front-end
+  - NPM : Package management
+	- Webpack : Module bundler
+	- SCSS : Stylesheet
+- Django library
+  - django-simple-captcha : Human validation
+	- django-compressor : Compress static files
+	- django-suit : Admin interface
+	- django-silk : Inspection tool 
+	- REST framework JWT : JSON Web Token authentication
+
+
+## Models & Permissions
+
+- User : User profile which extends default user class
+  - List : admin only
+  - Create : anyone
+  - Retrieve : own self or admin
+  - Update : own self or admin
+	- Partial update : own self or admin
+  - Destroy : admin only
+- Article : Article written by user 
+  - List : anyone
+  - Create : logged in user
+	- Retrieve : anyone
+  - Update : own self only
+	- Partial update : own self only
+	- Destroy : admin only
+- Comment : Comment under specific article
+  - List : anyone
+  - Create : logged in user
+	- Retrieve : anyone
+  - Update : own self only
+	- Partial update : own self only
+	- Destroy : admin only
+
+
 ## Directory structure
 	
 <pre>
