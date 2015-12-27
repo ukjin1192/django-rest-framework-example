@@ -115,6 +115,7 @@ MIDDLEWARE_CLASSES = (
 
 # 3rd-party applications
 INSTALLED_APPS += (
+    'captcha',
     'compressor',
     'djcelery',
     'django_extensions',

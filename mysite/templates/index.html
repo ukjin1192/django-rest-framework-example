@@ -24,10 +24,14 @@
 <hr/>
 <div>
   <h2>Create user</h2>
+	<img src="" id="captcha-image" />
+	<button id="refresh-captcha-btn">Get/Refresh captcha</button>
   <form id="create-user-form">
     <input type="email" name="email" placeholder="username@domain.com" required />
     <input type="text" name="username" placeholder="username" required />
     <input type="password" name="password" placeholder="password" required />
+    <input type="hidden" name="captcha-key" value="" required />
+    <input type="text" name="captcha-value" placeholder="captcha value" required />
     <input type="submit" value="Create" />
   </form>
 </div>

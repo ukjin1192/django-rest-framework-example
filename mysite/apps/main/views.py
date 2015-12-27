@@ -1,6 +1,7 @@
 #!usr/bin/python
 # -*- coding:utf-8 -*-
 
+from captcha.models import CaptchaStore
 from django.contrib.auth.hashers import make_password
 from main.models import User, Article, Comment
 from main.permissions import UserPermission, IsAuthorOrReadOnly
@@ -30,6 +31,28 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (UserPermission,)
+
+    def create(self, request, *args, **kwargs):
+        # Check captcha validation 
+        if 'captcha-value' not in self.request.data or 'captcha-key' not in self.request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        captcha_key = self.request.data['captcha-key']
+        captcha_value = self.request.data['captcha-value']
+        
+        try:
+            captcha = CaptchaStore.objects.get(challenge=captcha_value, hashkey=captcha_key)
+            captcha.delete()
+        except:
+            return Response(
+                    {'state': False, 'code': 1, 'message': 'Captcha input is not correct.'},
+                    status=status.HTTP_200_OK)
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         password = make_password(self.request.data['password'])

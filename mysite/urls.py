@@ -33,6 +33,10 @@ urlpatterns = [
         r'^api/', 
         include('main.urls')
     ),
+    url(
+        r'^captcha/', 
+        include('captcha.urls')
+    ),
     # Sample front-end page
     url(
         r'^$', 
