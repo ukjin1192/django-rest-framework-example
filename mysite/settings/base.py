@@ -116,7 +116,6 @@ MIDDLEWARE_CLASSES = (
 # 3rd-party applications
 INSTALLED_APPS += (
     'captcha',
-    'compressor',
     'djcelery',
     'django_extensions',
     'redisboard',
@@ -151,14 +150,6 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
     'JWT_EXPIRATION_DELTA': timedelta(days=100),
 }
-
-# Compressor settings
-COMPRESS_URL = STATIC_URL
-COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_OUTPUT_DIR = 'CACHE'
-STATICFILES_FINDERS += (
-    'compressor.finders.CompressorFinder',
-)
 
 # Celery settings for async tasks
 djcelery.setup_loader()

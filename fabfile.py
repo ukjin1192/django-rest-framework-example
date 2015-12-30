@@ -87,7 +87,6 @@ def update_staticfiles():
         local("webpack")
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")
-        local("./manage.py compress --force")
 
 
 def remote_deploy():

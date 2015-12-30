@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load compress %}
 {% load cache %}
 {% load i18n %}
 
@@ -9,16 +8,12 @@
 <title>Django REST framework example</title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  {% compress css %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  {% endcompress %}
 </head>
 <body>
   {% block container %}{% endblock %}
 
-  {% compress js %}
   <script type="text/javascript" src="{% static 'js/dist/vendor.bundle.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/dist/bundle.js' %}"></script>
-  {% endcompress %}
 </body>
 </html>
