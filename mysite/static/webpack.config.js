@@ -34,7 +34,7 @@ module.exports = {
                 test: /\.scss$/,
                 // 1. Convert SCSS to CSS
                 // 2. Insert CSS to <style> tag
-                loader: "css-loader!sass-loader"
+                loader: "style-loader!css-loader!sass-loader"
             },
             {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, 

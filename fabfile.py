@@ -81,9 +81,7 @@ def clear_silk_logs():
 
 
 def update_staticfiles():
-    with lcd(ROOT_DIR + "/" + PROJECT_NAME + "/static/css/"):
-        local("sass styles.scss:styles.css")
-    with lcd(ROOT_DIR + "/" + PROJECT_NAME + "/static/js/"):
+    with lcd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
         local("webpack")
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")

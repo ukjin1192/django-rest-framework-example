@@ -12,11 +12,10 @@
 	- Fabric : Deploy tool
 - Front-end
 	- NPM : Package management
-	- Webpack : Module bundler
+	- Webpack : Manage static files and bundle modules
 	- SCSS : Stylesheet
 - Django framework libraries
 	- django-simple-captcha : Human validation
-	- django-compressor : Compress static files
 	- django-suit : Admin interface
 	- django-silk : Inspection tool 
 	- REST framework JWT : JSON Web Token authentication
@@ -99,20 +98,16 @@
 				404.html
 				503.html
 			static/
-				css/
-					styles.scss
-					styles.map
-					styles.css
-				js/
-					index.js
-					webpack.config.js
-					module/
-						obtainAuthToken.js
-						verifyAuthToken.js
-						setAuthToken.js
-						refreshAuthToken.js
-						clearAuthToken.js
-						setCSRFToken.js
+				index.js
+				webpack.config.js
+				styles.scss
+				module/
+					obtainAuthToken.js
+					verifyAuthToken.js
+					setAuthToken.js
+					refreshAuthToken.js
+					clearAuthToken.js
+					setCSRFToken.js
 </pre>
 
 

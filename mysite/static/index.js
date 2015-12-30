@@ -1,6 +1,7 @@
 'use strict';
 
 require('bootstrap-webpack');
+require('./styles.scss');
 
 var setCSRFToken = require('./module/setCSRFToken');
 var setAuthToken = require('./module/setAuthToken');
