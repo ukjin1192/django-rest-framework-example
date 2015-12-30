@@ -1,6 +1,7 @@
 'use strict';
 
-var $ = require('jquery');
+require('bootstrap-webpack');
+
 var setCSRFToken = require('./module/setCSRFToken');
 var setAuthToken = require('./module/setAuthToken');
 var clearAuthToken = require('./module/clearAuthToken');
@@ -32,7 +33,7 @@ $(document).on('click', '#refresh-captcha-btn', function() {
     }).done(function(data) {
         console.log('Succeed to refresh captcha');
         console.log(data);
-        
+
         $('#captcha-image').attr('src', data.image_url);
         $('#create-user-form').find('[name="captcha-key"]').val(data.key);
     }).fail(function(data) {
@@ -83,9 +84,9 @@ $(document).on('submit', '#create-user-form', function(event) {
 $(document).on('click', '#read-user-btn', function() {
     if (localStorage.getItem('user_id') != null) {
         var userID = localStorage.getItem('user_id');
-        
+
         setAuthToken();
-        
+
         $.ajax({
             url: '/api/users/' + userID + '/',
             type: 'GET'
@@ -106,13 +107,13 @@ $(document).on('submit', '#update-user-email-form', function(event) {
         var userID = localStorage.getItem('user_id');
         var updateUserEmailForm = $(this);
         var formData = new FormData();
-        
+
         formData.append('email', updateUserEmailForm.find('[name="email"]').val());
         formData.append('original-password', updateUserEmailForm.find('[name="original-password"]').val());
-        
+
         setCSRFToken();
         setAuthToken();
-        
+
         $.ajax({
             url: '/api/users/' + userID + '/',
             type: 'PATCH',
@@ -126,14 +127,14 @@ $(document).on('submit', '#update-user-email-form', function(event) {
             } else {
                 console.log('Succeed to update user email');
                 console.log(data);
-                
+
                 clearAuthToken();
-                
+
                 var loginData = new FormData();
-                
+
                 loginData.append('email', updateUserEmailForm.find('[name="email"]').val());
                 loginData.append('password', updateUserEmailForm.find('[name="original-password"]').val());
-                
+
                 obtainAuthToken(loginData);
             }
         }).fail(function(data) {
@@ -150,12 +151,12 @@ $(document).on('submit', '#update-user-username-form', function(event) {
         var userID = localStorage.getItem('user_id');
         var updateUserUsernameForm = $(this);
         var formData = new FormData();
-        
+
         formData.append('username', updateUserUsernameForm.find('[name="username"]').val());
-        
+
         setCSRFToken();
         setAuthToken();
-        
+
         $.ajax({
             url: '/api/users/' + userID + '/',
             type: 'PATCH',
@@ -180,13 +181,13 @@ $(document).on('submit', '#update-user-password-form', function(event) {
         var userID = localStorage.getItem('user_id');
         var updateUserPasswordForm = $(this);
         var formData = new FormData();
-        
+
         formData.append('original-password', updateUserPasswordForm.find('[name="original-password"]').val());
         formData.append('password', updateUserPasswordForm.find('[name="password"]').val());
-        
+
         setCSRFToken();
         setAuthToken();
-        
+
         $.ajax({
             url: '/api/users/' + userID + '/',
             type: 'PATCH',
@@ -200,14 +201,14 @@ $(document).on('submit', '#update-user-password-form', function(event) {
             } else {
                 console.log('Succeed to update user password');
                 console.log(data);
-                
+
                 clearAuthToken();
-                
+
                 var loginData = new FormData();
-                
+
                 loginData.append('email', localStorage.getItem('email'));
                 loginData.append('password', updateUserPasswordForm.find('[name="password"]').val());
-                
+
                 obtainAuthToken(loginData);
             }
         }).fail(function(data) {
@@ -224,13 +225,13 @@ $(document).on('submit', '#delete-user-form', function(event) {
         var userID = localStorage.getItem('user_id');
         var deleteUserForm = $(this);
         var formData = new FormData();
-        
+
         formData.append('original-password', deleteUserForm.find('[name="original-password"]').val());
         formData.append('is_active', false);
-        
+
         setCSRFToken();
         setAuthToken();
-        
+
         $.ajax({
             url: '/api/users/' + userID + '/',
             type: 'PATCH',

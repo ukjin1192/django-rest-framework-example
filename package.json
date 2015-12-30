@@ -18,9 +18,13 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "jquery.cookie": "~1.4.1",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "bootstrap-webpack": "0.0.5"
   },
   "devDependencies": {
-    "webpack": "~1.12.9"
+    "webpack": "~1.12.9",
+    "node-sass": "~3.4.2",
+    "sass-loader": "~3.1.2",
+    "es6-promise": "~3.0.2"
   }
 }
