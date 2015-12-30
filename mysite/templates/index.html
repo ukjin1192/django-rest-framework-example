@@ -5,11 +5,11 @@
 {% block container %}
 <div>
   <h1>Sample front-end page for testing</h1>
+	<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
   <span id="login-info"></span>
+	<button id="launch-modal-btn">Launch modal</button>
 </div>
 <hr/>
-<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-<span id="scss-test">RED</span>
 <div>
   <h2>Login</h2>
   <form id="login-form">
@@ -148,4 +148,27 @@
 	</form>
 </div>
 <hr/>
+{% endblock %}
+
+
+{% block modal %}
+<div class="modal fade" id="modal-test" tabindex="-1" role="dialog" aria-labelledby="">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+				Modal contents
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

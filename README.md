@@ -14,6 +14,7 @@
 	- NPM : Package management
 	- Webpack : Manage static files and bundle modules
 	- SCSS : Stylesheet
+	- Bootstrap : Framework made by twitter
 - Django framework libraries
 	- django-simple-captcha : Human validation
 	- django-suit : Admin interface

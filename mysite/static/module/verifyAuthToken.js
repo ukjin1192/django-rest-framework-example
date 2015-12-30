@@ -1,11 +1,8 @@
 'use strict';
 
 var $ = require('jquery');
-var setCSRFToken = require('./setCSRFToken');
 
 module.exports = function verifyAuthToken() {
-  setCSRFToken();
-  
   $.ajax({
     url: '/api-token-verify/',
     type: 'POST',
