@@ -3,6 +3,8 @@
 var webpack = require('webpack');
 require('es6-promise').polyfill();
 
+var productionMode = JSON.parse(process.env.production_mode || '0');
+
 module.exports = {
   entry: {
     bundle: './index.js',
@@ -18,7 +20,23 @@ module.exports = {
     filename: '[name].js',
     publicPath: '/static/dist/'
   },
-  plugins: [
+  plugins: productionMode ? [
+    // Use jquery variable globally
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    }),
+    // Separate main file with vendors
+    new webpack.optimize.CommonsChunkPlugin(
+      'vendor',
+      'vendor.bundle.js'
+    ),
+    // Minify JS files
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true
+    })
+  ] : [
     // Use jquery variable globally
     new webpack.ProvidePlugin({
       $: "jquery",

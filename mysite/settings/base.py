@@ -1,11 +1,11 @@
 #usr/bin/python
 # -*- coding:utf-8 -*-
 
-import ConfigParser
 import djcelery
 import os
 import rest_framework
 import sys
+from ConfigParser import ConfigParser
 from datetime import timedelta
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
@@ -13,12 +13,13 @@ PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 PROJECT_NAME = os.path.basename(PROJECT_DIR)
 ROOT_DIR = os.path.dirname(PROJECT_DIR)
 APPS_DIR = os.path.join(PROJECT_DIR, 'apps')
+
 sys.path.insert(0, ROOT_DIR)
 sys.path.insert(0, PROJECT_DIR)
 sys.path.insert(0, APPS_DIR)
 
 # Get sensitive configuration
-config = ConfigParser.ConfigParser()
+config = ConfigParser()
 config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 
 # Send bug reports on production mode

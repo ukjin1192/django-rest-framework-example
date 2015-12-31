@@ -1,6 +1,9 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
+from ConfigParser import ConfigParser
+from django.core.wsgi import get_wsgi_application
+import djcelery
 import os
 import sys
 
@@ -12,19 +15,21 @@ sys.path.insert(0, PROJECT_DIR)
 sys.path.insert(0, ROOT_DIR)
 sys.path.insert(0, APPS_DIR)
 
-# For development mode
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.dev')
+# Get sensitive configuration
+config = ConfigParser()
+config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 
-# For production mode
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.prod')
+if int(config.get('django', 'development_mode')) == 1:
+    # Development mode
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.dev')
+else:
+    # Production mode
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.prod')
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from django.core.wsgi import get_wsgi_application
-
 application = get_wsgi_application()
 
-import djcelery
-
+# Load celery
 djcelery.setup_loader()

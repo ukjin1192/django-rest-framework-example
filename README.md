@@ -158,23 +158,10 @@ $ vi nginx.dev.conf nginx.prod.conf
 
 ~~~~
 $ cd {PROJECT PATH}/
-$ vi manage.py
-~~~~
-
-- Select development mode or production mode
-
-~~~~
-$ vi package.json
+$ vi package.json [Edit input]
 
 	:%s/mysite/{YOUR PROJECT NAME}/g
 ~~~~
-
-~~~~
-$ cd {PROJECT PATH}/{PROJECT NAME}/
-$ vi wsgi.py
-~~~~
-
-- Select development mode or production mode
 
 #### Fill out sensitive data
 

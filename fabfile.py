@@ -1,12 +1,12 @@
 #!/bin/bash
-import ConfigParser
 import os
+from ConfigParser import ConfigParser
 from fabric.api import *
 
 ROOT_DIR = os.path.dirname(__file__)
 
 # Get sensitive configuration
-config = ConfigParser.ConfigParser()
+config = ConfigParser()
 config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 
 PROJECT_NAME = config.get('django', 'project_name')
@@ -82,7 +82,12 @@ def clear_silk_logs():
 
 def update_staticfiles():
     with lcd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
-        local("webpack")
+        if int(config.get('django', 'development_mode')) == 1:
+            # Development mode
+            local("webpack")
+        else:
+            # Production mode
+            local("production_mode=1 webpack")
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")
 
