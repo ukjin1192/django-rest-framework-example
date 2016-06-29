@@ -4,8 +4,6 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -111,16 +109,6 @@ class User(AbstractBaseUser):
     """
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def do_something_when_user_created(sender, instance=None, created=False, **kwargs):
-    """
-    Do something when user created
-    """
-    if created:
-        user_obj = instance
-        pass
-
-
 class Article(models.Model):
     """
     Article information
@@ -213,3 +201,7 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return unicode(self.id) or u''
+
+
+# Place at the end to prevent circular import errors
+import main.signals
