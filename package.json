@@ -16,7 +16,7 @@
     "url": "https://github.com/ukjin1192/django-rest-framework-example/issues"
   },
   "dependencies": {
-    "jquery": "~2.1.4",
+    "jquery": "~3.5.0",
     "jquery.cookie": "~1.4.1",
     "lodash": "~3.10.1",
     "bootstrap": "~3.3.6",
