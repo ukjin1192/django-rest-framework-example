@@ -1,5 +1,5 @@
 Cheetah==2.4.4
-Django==1.8.6
+Django==1.11.29
 Fabric==1.10.2
 Jinja2==2.8
 Landscape-Client==14.12
