@@ -10,7 +10,7 @@ PAM==0.4.2
 Pillow==3.0.0
 PyJWT==1.4.0
 PyYAML==3.10
-Pygments==2.0.2
+Pygments==2.7.4
 Twisted-Core==13.2.0
 Twisted-Names==13.2.0
 Twisted-Web==13.2.0
