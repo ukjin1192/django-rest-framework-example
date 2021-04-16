@@ -29,7 +29,7 @@ configobj==4.7.2
 django-appconf==1.0.1
 django-celery==3.1.17
 django-compressor==1.5
-django-debug-toolbar==1.4
+django-debug-toolbar==1.11.1
 django-extensions==1.5.9
 django-filter==0.11.0
 django-redis==4.3.0
