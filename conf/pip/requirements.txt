@@ -7,7 +7,7 @@ Markdown==2.6.5
 MarkupSafe==0.23
 MySQL-python==1.2.5
 PAM==0.4.2
-Pillow==3.0.0
+Pillow==8.2.0
 PyJWT==1.4.0
 PyYAML==3.10
 Pygments==2.0.2
